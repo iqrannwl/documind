@@ -1,9 +1,28 @@
 from fastapi import FastAPI
-from views import health_routes
-from config import Config
+from fastapi.middleware.cors import CORSMiddleware
+from app.settings import settings
+from views import document_routes, query_routes, health_routes
 
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    description="AI-powered document question answering using vector search and LLMs"
+)
 
-app = FastAPI(title=Config.APP_NAME, version=Config.VERSION)
+# CORS setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Health check
-app.include_router(health_routes.router, prefix="/health", tags=["Health"])
+# Include all routers (Views)
+app.include_router(health_routes.router, prefix="/api/v1")
+app.include_router(document_routes.router, prefix="/api/v1")
+app.include_router(query_routes.router, prefix="/api/v1")
+
+@app.get("/")
+def root():
+    return {"message": f"{settings.PROJECT_NAME} running!", "version": settings.VERSION}
