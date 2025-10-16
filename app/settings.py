@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     CHUNK_SIZE: int = config("CHUNK_SIZE", default=500, cast=int)
     CHUNK_OVERLAP: int = config("CHUNK_OVERLAP", default=50, cast=int)
     ALLOWED_ORIGINS: Optional[str] = config("ALLOWED_ORIGINS", default="*")
+    EMBEDDING_MODEL: str = config("EMBEDDING_MODEL", default="text-embedding-ada-002")
     
     class Config:
         env_file = ".env"

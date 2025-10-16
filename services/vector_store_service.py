@@ -65,7 +65,7 @@ class VectorStoreService:
     
     async def _get_embedding(self, text: str) -> np.ndarray:
         response = await self.client.embeddings.create(
-            model="text-embedding-ada-002",
+            model=settings.EMBEDDING_MODEL,
             input=text
         )
         return np.array(response.data[0].embedding, dtype=np.float32)
